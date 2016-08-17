@@ -1,6 +1,3 @@
-#include "xbkMenu.h"
-#include <stdlib.h>
-
 /*
  * This file provides all the logic to navigate a menu system and edit menu
  * field values using a five control buttons (up, down, left, right, enter).
@@ -24,6 +21,9 @@
  * Some menus act as submenus. These typically do not have a field value.
  * Some menus do not have submenus. These will sometimes have a field value.
  */
+
+#include "xbkMenu.h"
+#include <stdlib.h>
 
 /* Public Functions */
 
