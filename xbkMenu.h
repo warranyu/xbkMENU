@@ -33,16 +33,16 @@ tyoedef enum xbkMenuEvent
 
 typedef struct xbkMenu
 {
-        char name[20];                  // name of the menu
-        xbkMenu * parent_menu;          // pointer to the perent xbkMenu
-        xbkMenu ** submenus;            // pointer to array of xbkMenu
-        uint8_t number_of_submenues;    // total number of submenus
-        uint8_t submenu_select_index;   // which submenu is currently selected
-        xbkMenuMode mode;               //
-        (void)* init;                   // pointer to the menu's init function
-        (void)* update;                 // pointer to the menu's update function
-        xbkMenuFieldType field_type     // the field type
-        char field_value[20];           // menu field value, if it exists
+        char name[20];                          // name of the menu
+        xbkMenu * parent_menu;                  // pointer to the perent xbkMenu
+        xbkMenu ** submenus;                    // pointer to array of xbkMenu
+        uint8_t number_of_submenues;            // total number of submenus
+        uint8_t submenu_select_index;           // which submenu is currently selected
+        xbkMenuMode mode;                       // the current menu mode
+        xbkMenu * (*init)(xbkMenu * menu);      // pointer to the menu's init function
+        xbkMenu * (*update)(xbkMenu * menu);    // pointer to the menu's update function
+        xbkMenuFieldType field_type             // the field type
+        char field_value[20];                   // menu field value, if it exists
 } xbkMenu;
 
 #endif

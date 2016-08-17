@@ -1,6 +1,30 @@
 #include "xbkMenu.h"
 #include <stdlib.h>
 
+/*
+ * This file provides all the logic to navigate a menu system and edit menu
+ * field values using a five control buttons (up, down, left, right, enter).
+ * The user can instantiate a menu hierarchy and connect up display and other
+ * functionality to the menu's init() and update() functions. Typically the
+ * init() and update() functions will return a pointer to its own menu, but
+ * sometimes, for example in a case of a menu that toggles a gpio, the init()
+ * function will toggle the gpio and immediately return a pointer to the parent
+ * menu.
+ *
+ * The menu system is broken down into three modes:
+ *      "Go Back"         - This mode merely asks for the user to confirm that
+ *                          they want to go back to the parent menu.
+ *      "Submenu Select"  - This mode changes the selected submenu and will
+ *                          navigate to selected submenu when enter is pressed.
+ *      "Edit Menu Field" - This mode allows the user to modify the menu's
+ *                          field value.
+ *
+ * Each menu has a parent and a list of submenus along with a field value.
+ * Some menus do not have a parent menu (NULL). These are the top level menus.
+ * Some menus act as submenus. These typically do not have a field value.
+ * Some menus do not have submenus. These will sometimes have a field value.
+ */
+
 /* Public Functions */
 
 /**
@@ -39,10 +63,7 @@ xbkMenu * xbkMenu_Service_GoBackMode(xbkMenu * menu, xbkMenuEvent event)
                 return menu;
         case XBKMENU_ENTER:
                 if(menu->parent_menu->init != NULL)
-                {
-                        menu->parent_menu->init();
-                        return menu->parent_menu;
-                }
+                        return menu->parent_menu->init(menu);
                 else
                         return menu;
         default:
@@ -75,15 +96,11 @@ xbkMenu * xbkMenu_Service_SubMenuSelectMode(xbkMenu * menu, xbkMenuEvent event)
                 return menu;
         case XBKMENU_ENTER:
                 if(menu->submenu[submenu_select_index]->init != NULL)
-                {
-                        menu->submenu[submenu_select_index]->init();
-                        return menu->submenu[submenu_select_index];
-                }
+                        return menu->submenu[submenu_select_index]->init(menu);
                 else
                         return menu;
         default:
-                menu->update();
-                return menu;
+                return menu->update(menu);
         }
 }
 
