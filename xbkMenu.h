@@ -16,6 +16,7 @@ typedef enum xbkMenuMode
 
 typedef enum xbkMenuFieldType
 {
+        XBK_FIELD_NONE,
         XBK_FIELD_INTEGER,
         XBK_FIELD_STRING
 }
@@ -40,7 +41,6 @@ typedef struct xbkMenu
         xbkMenuMode mode;               //
         (void)* init;                   // pointer to the menu's init function
         (void)* update;                 // pointer to the menu's update function
-        uint8_t has_field;              // does this menu have a field value
         xbkMenuFieldType field_type     // the field type
         char field_value[20];           // menu field value, if it exists
 } xbkMenu;

@@ -70,7 +70,7 @@ xbkMenu * xbkMenu_Service_SubMenuSelectMode(xbkMenu * menu, xbkMenuEvent event)
                 menu->mode = XBK_GO_BACK;
                 return menu;
         case XBKMENU_RIGHT:
-                if(menu->has_field)
+                if(menu->field_type != XBK_FIELD_NONE)
                         menu->mode = XBK_EDIT_MENU_FIELD;
                 return menu;
         case XBKMENU_ENTER:
