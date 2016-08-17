@@ -34,13 +34,6 @@ typedef enum xbkMenuMode
         XBK_EDIT_MENU_FIELD             // This mode is used to edit a menu field
 } xbkMenuMode;
 
-typedef enum xbkMenuFieldType
-{
-        XBK_FIELD_NONE,
-        XBK_FIELD_INTEGER,
-        XBK_FIELD_STRING
-}
-
 tyoedef enum xbkMenuEvent
 {
         XBKMENU_UP,
@@ -63,8 +56,11 @@ struct xbkMenu
         xbkMenuMode mode;                       // the current menu mode
         xbkMenu * (*init)(xbkMenu * menu);      // pointer to the menu's init function
         xbkMenu * (*update)(xbkMenu * menu);    // pointer to the menu's update function
-        xbkMenuFieldType field_type             // the field type
-        char field_value[20];                   // menu field value, if it exists
+        xbkMenu * (*execute)(xbkMenu * menu);   // pointer to the menu's execute function
+        uint8_t has_field;                      // indicates if this menu has a valid field value
+        int32_t field_value;                    // menu field value, if it exists
+        int32_t field_min_val;                  // maximum field value
+        int32_t field_max_val;                  // minimum field value
 };
 
 #endif

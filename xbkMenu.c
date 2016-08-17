@@ -91,7 +91,7 @@ xbkMenu * xbkMenu_Service_SubMenuSelectMode(xbkMenu * menu, xbkMenuEvent event)
                 menu->mode = XBK_GO_BACK;
                 return menu;
         case XBKMENU_RIGHT:
-                if(menu->field_type != XBK_FIELD_NONE)
+                if(menu->has_field)
                         menu->mode = XBK_EDIT_MENU_FIELD;
                 return menu;
         case XBKMENU_ENTER:
@@ -112,55 +112,28 @@ xbkMenu * xbkMenu_Service_SubMenuSelectMode(xbkMenu * menu, xbkMenuEvent event)
  */
 xbkMenu * xbkMenu_Service_EditMenuFieldMode(xbkMenu * menu, xbkMenuEvent event)
 {
-        switch(menu->field_type)
-        {
-        case XBK_FIELD_INTEGER:
-                return xbkMenu_Service_EditMenuFieldModeInteger(menu, event);
-        case XBK_FIELD_STRING:
-                return xbkMenu_Service_EditMenuFieldModeString(menu, event);
-        default:
-                return menu;
-        }
-}
-
-/**
- * Handles the changing of integer type field value for a menu
- * @param  menu  pointer to the current menu
- * @param  event the xbkMenuEvent
- * @return       pointer to the next menu to be processed
- */
-xbkMenu * xbkMenu_Service_EditMenuFieldModeInteger(xbkMenu * menu, xbkMenuEvent event)
-{
-        int32_t value = atoi(menu->field_value);
         switch (event)
         {
         case XBKMENU_UP:
-                itoa(value++, menu->field_value, 10);
+                if(menu->field_value >= menu->field_max_val)
+                        menu->field_value = menu->field_min_val;
+                else
+                        menu->field_value++;
                 return menu;
         case XBKMENU_DOWN:
-                itoa(value--, menu->field_value, 10);
+                if(menu->field_value <= menu->field_min_val)
+                        menu->field_value = menu->field_max_val;
+                else
+                        menu->field_value--;
                 return menu;
         case XBKMENU_LEFT:
                 menu->mode = XBK_SUBMENU_SELECT;
                 return menu;
         case XBKMENU_ENTER:
-                menu->mode = XBK_SUBMENU_SELECT;
-                return menu;
+                return menu->execute(menu);
         default:
                 return menu;
         }
-}
-
-/**
- * Handles the changing of string type field value for a menu
- * @param  menu  pointer to the current menu
- * @param  event the xbkMenuEvent
- * @return       pointer to the next menu to be processed
- */
-xbkMenu * xbkMenu_Service_EditMenuFieldModeString(xbkMenu * menu, xbkMenuEvent event)
-{
-        // TODO implement menu field editing in string mode
-        return menu;
 }
 
 /**
